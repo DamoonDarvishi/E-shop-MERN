@@ -30,10 +30,13 @@ app.use(`${api}/users`, usersRouter);
 const Product = require("./models/product");
 
 // D A T A B A S E
+
+// const URL = "mongodb://localhost:27017/E-Shop-MERN";
 mongoose
   .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
     dbName: "eshop-database",
   })
   .then(() => {
