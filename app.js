@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const errorHandler = require("./helpers/error-handler");
+const authJwt = require("./helpers/jwt");
 
 require("dotenv/config");
 
@@ -13,6 +15,8 @@ app.options("*", cors());
 // M i d d l e w a r e
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
+app.use(authJwt());
+app.use(errorHandler);
 
 // R o u t e r
 const categoriesRouter = require("./routers/categories");
@@ -27,13 +31,13 @@ app.use(`${api}/orders`, ordersRouter);
 app.use(`${api}/products`, productsRouter);
 app.use(`${api}/users`, usersRouter);
 
-const Product = require("./models/product");
-
 // D A T A B A S E
-
-// const URL = "mongodb://localhost:27017/E-Shop-MERN";
+// LOCAL
+const URL = "mongodb://localhost:27017/eshop-database";
+// mongodb atlas
+// const URL = process.env.CONNECTION_STRING;
 mongoose
-  .connect(process.env.CONNECTION_STRING, {
+  .connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

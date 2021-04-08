@@ -6,8 +6,14 @@ const router = express.Router();
 
 // GET products list
 router.get(`/`, async (req, res) => {
+  let filter = {};
+  if (req.query.categories) {
+    filter = { category: req.query.categories.split(",") };
+  }
+
   // const productList = await Product.find().select("name image -_id");
-  const productList = await Product.find().populate("category");
+  // const productList = await Product.find().populate("category");
+  const productList = await Product.find(filter).populate("category");
 
   if (!productList) {
     res.status(500).json({ success: false });
